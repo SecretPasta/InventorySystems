@@ -16,6 +16,8 @@ class INVENTORY_API UInv_HUDWidget : public UUserWidget
 	
 public:
 	
+	void Thingy();
+	
 	UFUNCTION(BlueprintImplementableEvent, Category = "Inventory")
 	void ShowPickupMessage(const FString& Message);
 	
