@@ -8,6 +8,7 @@
 #include "Inv_ItemManifest.generated.h"
 
 class UInv_InventoryItem;
+struct FInv_ItemFragment;
 
 /**
  * The Item Manifest contains all of the necessary data
@@ -22,7 +23,11 @@ struct INVENTORY_API FInv_ItemManifest
 	UInv_InventoryItem* Manifest(UObject* NewOuter);
 	EInv_ItemCategory GetItemCategory() const { return ItemCategory; }
 	FGameplayTag GetItemType() const { return ItemType; }
+	
 private:
+	
+	UPROPERTY(EditAnywhere, Category = "Inventory", meta = (ExcludeBaseStruct))
+	TArray<TInstancedStruct<FInv_ItemFragment>> Fragments;
 	
 	UPROPERTY(EditAnywhere, Category = "Inventory")
 	EInv_ItemCategory ItemCategory{EInv_ItemCategory::None};
