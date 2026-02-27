@@ -231,7 +231,23 @@ int32 UInv_InventoryGrid::GetStackAmount(const UInv_GridSlot* GridSlot) const
 
 void UInv_InventoryGrid::AddStacks(const FInv_SlotAvailabilityResult& Result)
 {
-	
+	if (!MatchesCategory(Result.Item.Get())) return;
+
+	for (const FInv_SlotAvailability& Availability : Result.SlotAvailabilities)
+	{
+		if (Availability.bItemAtIndex)
+		{
+			const TObjectPtr<UInv_GridSlot>& GridSlot = GridSlots[Availability.Index];
+			const TObjectPtr<UInv_SlottedItem>& SlottedItem = SlottedItems.FindChecked(Availability.Index);
+			SlottedItem->UpdateStackCount(GridSlot->GetStackCount() + Availability.AmountToFill);
+			GridSlot->SetStackCount(GridSlot->GetStackCount() + Availability.AmountToFill);
+		}
+		else
+		{
+			AddItemAtIndex(Result.Item.Get(), Availability.Index, Result.bStackable, Availability.AmountToFill);
+			UpdateGridSlots(Result.Item.Get(), Availability.Index, Result.bStackable, Availability.AmountToFill);
+		}
+	}
 }
 
 FInv_SlotAvailabilityResult UInv_InventoryGrid::HasRoomForItem(const UInv_ItemComponent* ItemComponent)
