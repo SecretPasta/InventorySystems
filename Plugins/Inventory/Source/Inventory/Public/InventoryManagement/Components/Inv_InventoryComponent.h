@@ -13,6 +13,7 @@ class UInv_InventoryItem;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInventoryItemChanged, UInv_InventoryItem*, Item);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FNoRootInInventory);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FStackChange, const FInv_SlotAvailabilityResult&, Result);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable)
 class INVENTORY_API UInv_InventoryComponent : public UActorComponent
@@ -40,6 +41,7 @@ public:
 	FInventoryItemChanged OnItemAdded;
 	FInventoryItemChanged OnItemRemoved;
 	FNoRootInInventory NoRoomInInventory;
+	FStackChange OnStackChange;
 	
 protected:
 	virtual void BeginPlay() override;
