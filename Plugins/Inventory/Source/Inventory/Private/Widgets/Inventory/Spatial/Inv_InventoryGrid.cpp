@@ -245,7 +245,7 @@ void UInv_InventoryGrid::PickUp(UInv_InventoryItem* ClickedInventoryItem, const 
 {
 	AssignHoverItem(ClickedInventoryItem, GridIndex, GridIndex);
 	
-	// Remove clicked item from the grid
+	RemoveItemFromGrid(ClickedInventoryItem, GridIndex);
 }
 
 void UInv_InventoryGrid::AssignHoverItem(UInv_InventoryItem* InventoryItem)
@@ -280,6 +280,28 @@ void UInv_InventoryGrid::AssignHoverItem(UInv_InventoryItem* InventoryItem, cons
 
 	HoverItem->SetPreviousGridIndex(PreviousGridIndex);
 	HoverItem->UpdateStackCount(InventoryItem->IsStackable() ? GridSlots[GridIndex]->GetStackCount() : 0);
+}
+
+void UInv_InventoryGrid::RemoveItemFromGrid(UInv_InventoryItem* InventoryItem, const int32 GridIndex)
+{
+	const FInv_GridFragment* GridFragment = GetFragment<FInv_GridFragment>(InventoryItem, FragmentTags::GridFragment);
+	if (!GridFragment) return;
+
+	UInv_InventoryStatics::ForEach2D(GridSlots, GridIndex, GridFragment->GetGridSize(), Columns, [&](UInv_GridSlot* GridSlot)
+	{
+		GridSlot->SetInventoryItem(nullptr);
+		GridSlot->SetUpperLeftIndex(INDEX_NONE);
+		GridSlot->SetUnoccupiedTexture();
+		GridSlot->SetAvailable(true);
+		GridSlot->SetStackCount(0);
+	});
+
+	if (SlottedItems.Contains(GridIndex))
+	{
+		TObjectPtr<UInv_SlottedItem> FoundSlottedItem;
+		SlottedItems.RemoveAndCopyValue(GridIndex, FoundSlottedItem);
+		FoundSlottedItem->RemoveFromParent();
+	}
 }
 
 void UInv_InventoryGrid::AddStacks(const FInv_SlotAvailabilityResult& Result)
