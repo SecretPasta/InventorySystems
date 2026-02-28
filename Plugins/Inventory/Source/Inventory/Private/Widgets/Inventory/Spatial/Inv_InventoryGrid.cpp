@@ -40,7 +40,6 @@ void UInv_InventoryGrid::NativeTick(const FGeometry& MyGeometry, float InDeltaTi
 
 void UInv_InventoryGrid::UpdateTileParameters(const FVector2D& CanvasPosition, const FVector2D& MousePosition)
 {
-	// Calculate the tile quadrant
 	// if mouse not in canvas panel, return.
 	// Calculate the tile quadrant, tile index, and coordinates
 	const FIntPoint HoveredTileCoordinates = CalculateHoveredCoordinates(CanvasPosition, MousePosition);
@@ -48,7 +47,7 @@ void UInv_InventoryGrid::UpdateTileParameters(const FVector2D& CanvasPosition, c
 	LastTileParameters = TileParameters;
 	TileParameters.TileCoordinates = HoveredTileCoordinates;
 	TileParameters.TileIndex = UInv_WidgetUtils::GetIndexFromPosition(HoveredTileCoordinates, Columns);
-	
+	TileParameters.TileQuadrant = CalculateTileQuadrant(CanvasPosition, MousePosition);
 	
 	// Handle highlight/unhighlight of the grid slots
 }
@@ -59,6 +58,25 @@ FIntPoint UInv_InventoryGrid::CalculateHoveredCoordinates(const FVector2D& Canva
 		static_cast<int32>(FMath::FloorToInt((MousePosition.X - CanvasPosition.X) / TileSize)),
 		static_cast<int32>(FMath::FloorToInt((MousePosition.Y - CanvasPosition.Y) / TileSize))
 	};
+}
+
+EInv_TileQuadrant UInv_InventoryGrid::CalculateTileQuadrant(const FVector2D& CanvasPosition, const FVector2D& MousePosition) const
+{
+	// Calculate relative position within the current tile
+	const float TileLocalX = FMath::Fmod(MousePosition.X - CanvasPosition.X, TileSize);
+	const float TileLocalY = FMath::Fmod(MousePosition.Y - CanvasPosition.Y, TileSize);
+
+	// Determine which quadrant the mouse is in
+	const bool bIsTop = TileLocalY < TileSize / 2.f; // Top if Y is in the upper half
+	const bool bIsLeft = TileLocalX < TileSize / 2.f; // Left if X is in the left half
+
+	EInv_TileQuadrant HoveredTileQuadrant{EInv_TileQuadrant::None};
+	if (bIsTop && bIsLeft) HoveredTileQuadrant = EInv_TileQuadrant::TopLeft;
+	else if (bIsTop && !bIsLeft) HoveredTileQuadrant = EInv_TileQuadrant::TopRight;
+	else if (!bIsTop && bIsLeft) HoveredTileQuadrant = EInv_TileQuadrant::BottomLeft;
+	else if (!bIsTop && !bIsLeft) HoveredTileQuadrant = EInv_TileQuadrant::BottomRight;
+
+	return HoveredTileQuadrant;
 }
 
 void UInv_InventoryGrid::AddItem(UInv_InventoryItem* Item)
