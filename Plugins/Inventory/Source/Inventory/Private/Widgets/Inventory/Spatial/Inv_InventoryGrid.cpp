@@ -574,8 +574,11 @@ void UInv_InventoryGrid::OnSlottedItemClicked(int32 GridIndex, const FPointerEve
 			FillInStack(RoomInClickedSlot, HoveredStackCount - RoomInClickedSlot, GridIndex);
 			return;
 		}
-		// Is there no room in the clicked slot?
-		return;
+		// Clicked slot is already full - do nothing (maybe play a sound?)
+		if (RoomInClickedSlot == 0)
+		{
+			return;
+		}
 	}
 	// Swap with the hover item.
 	SwapWithHoverItem(ClickedInventoryItem, GridIndex);
