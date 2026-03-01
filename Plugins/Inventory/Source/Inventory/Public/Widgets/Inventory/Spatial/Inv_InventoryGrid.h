@@ -180,6 +180,9 @@ private:
 	UPROPERTY()
 	TObjectPtr<UInv_HoverItem> HoverItem;
 	
+	UPROPERTY(EditAnywhere, Category = "Inventory")
+	FVector2D ItemPopUpOffset{0.f};
+	
 	FInv_TileParameters TileParameters;
 	FInv_TileParameters LastTileParameters;
 	
