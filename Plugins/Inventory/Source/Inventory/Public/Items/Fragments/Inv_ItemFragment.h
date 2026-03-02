@@ -172,7 +172,7 @@ struct FInv_ConsumableFragment : public FInv_InventoryItemFragment
 private:
 	
 	UPROPERTY(EditAnywhere, Category = "Inventory", meta = (ExcludeBaseStruct))
-	TArray<TInstancedStruct<FInv_ConsumeModifier>> ConsumeModifier;
+	TArray<TInstancedStruct<FInv_ConsumeModifier>> ConsumeModifiers;
 	
 };
 

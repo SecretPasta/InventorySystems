@@ -21,10 +21,10 @@ void FInv_ImageFragment::Assimilate(UInv_CompositeBase* Composite) const
 {
 	FInv_InventoryItemFragment::Assimilate(Composite);
 	if (!MatchesWidgetTag(Composite)) return;
-	
+
 	UInv_Leaf_Image* Image = Cast<UInv_Leaf_Image>(Composite);
 	if (!IsValid(Image)) return;
-	
+
 	Image->SetImage(Icon);
 	Image->SetBoxSize(IconDimensions);
 	Image->SetImageSize(IconDimensions);
@@ -72,7 +72,7 @@ void FInv_LabeledNumberFragment::Manifest()
 
 void FInv_ConsumableFragment::OnConsume(APlayerController* PC)
 {
-	for (TInstancedStruct<FInv_ConsumeModifier>& Modifier : ConsumeModifier)
+	for (TInstancedStruct<FInv_ConsumeModifier>& Modifier : ConsumeModifiers)
 	{
 		FInv_ConsumeModifier& ModRef = Modifier.GetMutable();
 		ModRef.OnConsume(PC);
@@ -82,9 +82,9 @@ void FInv_ConsumableFragment::OnConsume(APlayerController* PC)
 void FInv_ConsumableFragment::Assimilate(UInv_CompositeBase* Composite) const
 {
 	FInv_InventoryItemFragment::Assimilate(Composite);
-	for (const TInstancedStruct<FInv_ConsumeModifier>& Modifier : ConsumeModifier)
+	for (const auto& Modifier : ConsumeModifiers)
 	{
-		const FInv_ConsumeModifier& ModRef = Modifier.Get();
+		const auto& ModRef = Modifier.Get();
 		ModRef.Assimilate(Composite);
 	}
 }
@@ -92,9 +92,9 @@ void FInv_ConsumableFragment::Assimilate(UInv_CompositeBase* Composite) const
 void FInv_ConsumableFragment::Manifest()
 {
 	FInv_InventoryItemFragment::Manifest();
-	for (TInstancedStruct<FInv_ConsumeModifier>& Modifier : ConsumeModifier)
+	for (auto& Modifier : ConsumeModifiers)
 	{
-		FInv_ConsumeModifier& ModRef = Modifier.GetMutable();
+		auto& ModRef = Modifier.GetMutable();
 		ModRef.Manifest();
 	}
 }
