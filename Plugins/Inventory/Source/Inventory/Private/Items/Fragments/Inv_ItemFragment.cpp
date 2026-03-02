@@ -70,18 +70,47 @@ void FInv_LabeledNumberFragment::Manifest()
 	bRandomizeOnManifest = false;
 }
 
+void FInv_ConsumableFragment::OnConsume(APlayerController* PC)
+{
+	for (TInstancedStruct<FInv_ConsumeModifier>& Modifier : ConsumeModifier)
+	{
+		FInv_ConsumeModifier& ModRef = Modifier.GetMutable();
+		ModRef.OnConsume(PC);
+	}
+}
+
+void FInv_ConsumableFragment::Assimilate(UInv_CompositeBase* Composite) const
+{
+	FInv_InventoryItemFragment::Assimilate(Composite);
+	for (const TInstancedStruct<FInv_ConsumeModifier>& Modifier : ConsumeModifier)
+	{
+		const FInv_ConsumeModifier& ModRef = Modifier.Get();
+		ModRef.Assimilate(Composite);
+	}
+}
+
+void FInv_ConsumableFragment::Manifest()
+{
+	FInv_InventoryItemFragment::Manifest();
+	for (TInstancedStruct<FInv_ConsumeModifier>& Modifier : ConsumeModifier)
+	{
+		FInv_ConsumeModifier& ModRef = Modifier.GetMutable();
+		ModRef.Manifest();
+	}
+}
+
 void FInv_HealthPotionFragment::OnConsume(APlayerController* PC)
 {
 	// Get a stats component from the PC or the PC->GetPawn()
 	// or get the Ability System Component and apply a Gameplay Effect (Get ASC from Pawn)
 	// or call an interface function for Healing()
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Health Potion consumed! Healing by: %f"), HealAmount));
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Health Potion consumed! Healing by: %f"), GetValue()));
 }
 
 void FInv_ManaPotionFragment::OnConsume(APlayerController* PC)
 {
 	// Replenish mana however you wish
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Mana Potion consumed! Mana replenished by: %f"), ManaAmount));
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Mana Potion consumed! Mana replenished by: %f"), GetValue()));
 }
