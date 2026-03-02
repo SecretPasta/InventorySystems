@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/CanvasPanel.h"
-#include "Widget/ItemDescription/Inv_ItemDescription.h"
+#include "Widgets/ItemDescription/Inv_ItemDescription.h"
 #include "Widgets/Inventory/InventoryBase/Inv_InventoryBase.h"
 #include "Inv_SpatialInventory.generated.h"
 
