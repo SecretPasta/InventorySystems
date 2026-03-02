@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Inv_Leaf_Text.h"
+#include "Widgets/Composite/Inv_Leaf_Text.h"
 
 #include "Components/TextBlock.h"
 
