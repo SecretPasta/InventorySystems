@@ -46,6 +46,8 @@ public:
 	
 	void SpawnDroppedItem(UInv_InventoryItem* Item, int32 StackCount);
 	
+	UInv_InventoryBase* GetInventoryMenu() const { return InventoryMenu; }
+	
 	FInventoryItemChanged OnItemAdded;
 	FInventoryItemChanged OnItemRemoved;
 	FNoRootInInventory NoRoomInInventory;
