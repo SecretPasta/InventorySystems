@@ -7,7 +7,7 @@
 #include "Inv_GridSlot.h"
 #include "Inv_EquippedGridSlot.generated.h"
 
-
+class UImage;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEquippedGridSlotClicked, UInv_EquippedGridSlot*, GridSlot, const FGameplayTag&, EquipmentTypeTag);
 
@@ -32,4 +32,7 @@ private:
 	
 	UPROPERTY(EditAnywhere, Category= "Inventory", meta = (GameplayTagFilter = "GameItems.Equipment"))
 	FGameplayTag EquipmentTypeTag;
+	
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UImage> Image_GreyedOutIcon;
 };
