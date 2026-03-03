@@ -9,6 +9,7 @@
 #include "Inv_SpatialInventory.generated.h"
 
 
+class UInv_EquippedSlottedItem;
 struct FGameplayTag;
 class UInv_EquippedGridSlot;
 class UCanvasPanel;
@@ -38,6 +39,7 @@ public:
 	virtual void OnItemUnHovered() override;
 	virtual bool HasHoverItem() const override;
 	virtual UInv_HoverItem* GetHoverItem() const override;
+	virtual float GetTileSize() const override;
 private: 
 	
 	UPROPERTY()
@@ -91,6 +93,9 @@ private:
 	
 	UFUNCTION()
 	void EquippedGridSlotClicked(UInv_EquippedGridSlot* EquippedGridSlot, const FGameplayTag& EquipmentTypeTag);
+	
+	UFUNCTION()
+	void EquippedSlottedItemClicked(UInv_EquippedSlottedItem* SlottedItem);
 	
 	void DisableButton(UButton* Button);
 

@@ -7,6 +7,7 @@
 #include "Widgets/Utils/Inv_WidgetUtils.h"
 #include "Inv_InventoryStatics.generated.h"
 
+class UInv_InventoryBase;
 class UInv_HoverItem;
 class UInv_ItemComponent;
 enum class EInv_ItemCategory : uint8;
@@ -38,6 +39,8 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	static UInv_HoverItem* GetHoverItem(APlayerController* PC);
+	
+	static UInv_InventoryBase* GetInventoryWidget(APlayerController* PC);
 	
 };
 

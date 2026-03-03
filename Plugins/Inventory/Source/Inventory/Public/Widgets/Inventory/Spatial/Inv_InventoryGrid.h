@@ -42,7 +42,8 @@ public:
 	void DropItem();
 	bool HasHoverItem() const;
 	UInv_HoverItem* GetHoverItem() const;
-	
+	float GetTileSize() const { return TileSize; }
+	 
 	UFUNCTION()
 	void AddItem(UInv_InventoryItem* Item);
 
