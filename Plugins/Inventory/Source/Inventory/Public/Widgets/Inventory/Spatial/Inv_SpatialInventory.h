@@ -14,6 +14,7 @@ class UButton;
 class UWidgetSwitcher;
 class UInv_InventoryGrid;
 class UInv_ItemDescription;
+class UInv_HoverItem;
 
 /**
  * 
@@ -34,7 +35,7 @@ public:
 	virtual void OnItemHovered(UInv_InventoryItem* Item) override;
 	virtual void OnItemUnHovered() override;
 	virtual bool HasHoverItem() const override;
-	
+	virtual UInv_HoverItem* GetHoverItem() const override;
 private: 
 	
 	UPROPERTY()
