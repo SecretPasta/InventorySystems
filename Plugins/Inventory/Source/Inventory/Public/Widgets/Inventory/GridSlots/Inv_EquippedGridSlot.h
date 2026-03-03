@@ -7,6 +7,7 @@
 #include "Inv_GridSlot.h"
 #include "Inv_EquippedGridSlot.generated.h"
 
+class UOverlay;
 class UImage;
 class UInv_EquippedSlottedItem;
 
@@ -44,4 +45,7 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<UInv_EquippedSlottedItem> EquippedSlottedItem;
+	
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UOverlay> Overlay_Root;
 };
