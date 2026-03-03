@@ -43,7 +43,8 @@ public:
 	bool HasHoverItem() const;
 	UInv_HoverItem* GetHoverItem() const;
 	float GetTileSize() const { return TileSize; }
-	 
+	void ClearHoverItem();
+
 	UFUNCTION()
 	void AddItem(UInv_InventoryItem* Item);
 
@@ -106,7 +107,6 @@ private:
 	void UnHighlightSlots(const int32 Index, const FIntPoint& Dimensions);
 	void ChangeHoverType(const int32 Index, const FIntPoint& Dimensions, EInv_GridSlotState GridSlotState);
 	void PutDownOnIndex(const int32 Index);
-	void ClearHoverItem();
 	UUserWidget* GetVisibleCursorWidget();
 	UUserWidget* GetHiddenCursorWidget();
 	bool IsSameStackable(const UInv_InventoryItem* ClickedInventoryItem) const;
