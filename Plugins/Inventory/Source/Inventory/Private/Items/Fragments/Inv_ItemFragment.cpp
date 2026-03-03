@@ -82,9 +82,9 @@ void FInv_ConsumableFragment::OnConsume(APlayerController* PC)
 void FInv_ConsumableFragment::Assimilate(UInv_CompositeBase* Composite) const
 {
 	FInv_InventoryItemFragment::Assimilate(Composite);
-	for (const auto& Modifier : ConsumeModifiers)
+	for (const TInstancedStruct<FInv_ConsumeModifier>& Modifier : ConsumeModifiers)
 	{
-		const auto& ModRef = Modifier.Get();
+		const FInv_ConsumeModifier& ModRef = Modifier.Get();
 		ModRef.Assimilate(Composite);
 	}
 }
@@ -92,9 +92,9 @@ void FInv_ConsumableFragment::Assimilate(UInv_CompositeBase* Composite) const
 void FInv_ConsumableFragment::Manifest()
 {
 	FInv_InventoryItemFragment::Manifest();
-	for (auto& Modifier : ConsumeModifiers)
+	for (TInstancedStruct<FInv_ConsumeModifier>& Modifier : ConsumeModifiers)
 	{
-		auto& ModRef = Modifier.GetMutable();
+		FInv_ConsumeModifier& ModRef = Modifier.GetMutable();
 		ModRef.Manifest();
 	}
 }
@@ -113,4 +113,57 @@ void FInv_ManaPotionFragment::OnConsume(APlayerController* PC)
 	// Replenish mana however you wish
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Mana Potion consumed! Mana replenished by: %f"), GetValue()));
+}
+
+
+void FInv_StrengthModifier::OnEquip(APlayerController* PC)
+{
+	GEngine->AddOnScreenDebugMessage(
+		-1,
+		5.f,
+		FColor::Green,
+		FString::Printf(TEXT("Strength increased by: %f"),
+			GetValue()));
+}
+
+void FInv_StrengthModifier::OnUnequip(APlayerController* PC)
+{
+	GEngine->AddOnScreenDebugMessage(
+		-1,
+		5.f,
+		FColor::Green,
+		FString::Printf(TEXT("Item unequipped. Strength decreased by: %f"),
+			GetValue()));
+}
+
+void FInv_EquipmentFragment::OnEquip(APlayerController* PC)
+{
+	if (bEquipped) return;
+	bEquipped = true;
+	for (TInstancedStruct<FInv_EquipModifier>& Modifier : EquipModifiers)
+	{
+		FInv_EquipModifier& ModRef = Modifier.GetMutable();
+		ModRef.OnEquip(PC);
+	}
+}
+
+void FInv_EquipmentFragment::OnUnequip(APlayerController* PC)
+{
+	if (!bEquipped) return;
+	bEquipped = false;
+	for (TInstancedStruct<FInv_EquipModifier>& Modifier : EquipModifiers)
+	{
+		FInv_EquipModifier& ModRef = Modifier.GetMutable();
+		ModRef.OnUnequip(PC);
+	}
+}
+
+void FInv_EquipmentFragment::Assimilate(UInv_CompositeBase* Composite) const
+{
+	FInv_InventoryItemFragment::Assimilate(Composite);
+	for (const TInstancedStruct<FInv_EquipModifier>& Modifier : EquipModifiers)
+	{
+		const FInv_EquipModifier& ModRef = Modifier.Get();
+		ModRef.Assimilate(Composite);
+	}
 }
