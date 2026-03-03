@@ -76,9 +76,21 @@ void UInv_SpatialInventory::EquippedGridSlotClicked(UInv_EquippedGridSlot* Equip
 void UInv_SpatialInventory::EquippedSlottedItemClicked(UInv_EquippedSlottedItem* SlottedItem)
 {
 	// Remove the Item Description
-	// Get the Equipped Grid Slot holding this item
+	UInv_InventoryStatics::ItemUnhovered(GetOwningPlayer());
+	
+	if (IsValid(GetHoverItem()) && GetHoverItem()->IsStackable()) return;
+	
+	
+	
 	// Get Item to Equip
+	UInv_InventoryItem* ItemToEquip = IsValid(GetHoverItem()) ? GetHoverItem()->GetInventoryItem() : nullptr;
+	
 	// Get Item to Unequip
+	UInv_InventoryItem* ItemToUnequip = SlottedItem->GetInventoryItem();
+	
+	// Get the Equipped Grid Slot holding this item
+	UInv_EquippedGridSlot* EquippedGridSlot = FindSlotWithEquippedItem(ItemToUnequip);
+	
 	// Clear the equipped grid slot of this item (set its inventory item to nullptr)
 	// Remove of the equipped slotted item from the equipped grid slot
 		// (unbind from the OnEquippedSlottedItemClicked )
@@ -88,6 +100,14 @@ void UInv_SpatialInventory::EquippedSlottedItemClicked(UInv_EquippedSlottedItem*
 	// Broadcast delegates for OnItemEquipped/OnItemUnequipped (from the IC)
 }
 
+UInv_EquippedGridSlot* UInv_SpatialInventory::FindSlotWithEquippedItem(UInv_InventoryItem* EquippedItem) const
+{
+	const TObjectPtr<UInv_EquippedGridSlot>* FoundEquippedGridSlot = EquippedGridSlots.FindByPredicate([EquippedItem](const UInv_EquippedGridSlot* GridSlot)
+	{
+		return GridSlot->GetInventoryItem() == EquippedItem;
+	});
+	return FoundEquippedGridSlot ? *FoundEquippedGridSlot : nullptr;
+}
 
 FReply UInv_SpatialInventory::NativeOnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent)
 {
