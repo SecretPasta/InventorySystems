@@ -231,7 +231,7 @@ struct FInv_EquipmentFragment : public FInv_InventoryItemFragment
 	
 	AInv_EquipActor* SpawnAttachedActor(USkeletalMeshComponent* AttachedMesh) const;
 	void DestroyAttachedActor() const;
-	FGameplayTag GetEquippedType() const { return  EquipmentType; }
+	FGameplayTag GetEquipmentType() const { return  EquipmentType; }
 	void SetEquippedActor(AInv_EquipActor* EquipActor);
 	
 private:
