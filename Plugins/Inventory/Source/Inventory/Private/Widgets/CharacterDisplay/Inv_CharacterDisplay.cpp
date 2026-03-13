@@ -7,25 +7,28 @@
 #include "EquipmentManagement/ProxyMesh/Inv_ProxyMesh.h"
 #include "Kismet/GameplayStatics.h"
 
-FReply UInv_CharacterDisplay::NativeOnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent)
+FReply UInv_CharacterDisplay::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
-	CurrentPosition = UWidgetLayoutLibrary::GetMousePositionOnViewport(GetOwningPlayer());
-	LastPosition = CurrentPosition;
-	
 	bIsDragging = true;
-	return FReply::Handled();
+ 
+	// Capture the mouse to keep receiving events outside the widget
+	return FReply::Handled().CaptureMouse(TakeWidget());
 }
 
+//2. Release the mouse on release: In `NativeOnMouseButtonUp`, make sure to release the capture.
 FReply UInv_CharacterDisplay::NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
 	bIsDragging = false;
-	return Super::NativeOnMouseButtonUp(InGeometry, InMouseEvent);
+ 
+	// Release the capture
+	return FReply::Handled().ReleaseMouseCapture();
 }
 
+// **3. Ignore Mouse Leave: Finally, in `NativeOnMouseLeave`, **remove** or 
 void UInv_CharacterDisplay::NativeOnMouseLeave(const FPointerEvent& InMouseEvent)
 {
 	Super::NativeOnMouseLeave(InMouseEvent);
-	bIsDragging = false;
+	//bIsDragging = false;
 }
 
 void UInv_CharacterDisplay::NativeOnInitialized()
