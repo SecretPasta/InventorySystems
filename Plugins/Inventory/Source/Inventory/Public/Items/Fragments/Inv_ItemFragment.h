@@ -7,6 +7,8 @@
 #include "Inv_ItemFragment.generated.h"
 
 
+class AInv_EquipActor;
+
 USTRUCT(BlueprintType)
 struct FInv_ItemFragment
 {
@@ -215,7 +217,7 @@ struct FInv_StrengthModifier : public FInv_EquipModifier
 	virtual void OnUnequip(APlayerController* PC) override;
 };
 
-
+class USkeletalMeshComponent;
 USTRUCT(BlueprintType)
 struct FInv_EquipmentFragment : public FInv_InventoryItemFragment
 {
@@ -226,8 +228,20 @@ struct FInv_EquipmentFragment : public FInv_InventoryItemFragment
 	void OnUnequip(APlayerController* PC);
 	virtual void Assimilate(UInv_CompositeBase* Composite) const override;
 	virtual void Manifest() override;
+	
+	AInv_EquipActor* SpawnAttachedActor(USkeletalMeshComponent* AttachedMesh) const;
+	void DestroyAttachedActor() const;
+	
 private:
 
 	UPROPERTY(EditAnywhere, Category = "Inventory")
 	TArray<TInstancedStruct<FInv_EquipModifier>> EquipModifiers;
+	
+	UPROPERTY(EditAnywhere, Category = "Inventory")
+	TSubclassOf<AInv_EquipActor> EquipActorClass{nullptr};
+	
+	TWeakObjectPtr<AInv_EquipActor> EquippedActor{nullptr};
+	
+	UPROPERTY(EditAnywhere, Category = "Inventory")
+	FName SocketAttachPoint{NAME_None};
 };
