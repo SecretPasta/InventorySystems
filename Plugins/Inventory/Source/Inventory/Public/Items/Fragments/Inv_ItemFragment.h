@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
 #include "StructUtils/InstancedStruct.h"
-#include "Windows/WindowsApplication.h"
+//#include "Windows/WindowsApplication.h"
 #include "Inv_ItemFragment.generated.h"
 
 
@@ -231,6 +231,8 @@ struct FInv_EquipmentFragment : public FInv_InventoryItemFragment
 	
 	AInv_EquipActor* SpawnAttachedActor(USkeletalMeshComponent* AttachedMesh) const;
 	void DestroyAttachedActor() const;
+	FGameplayTag GetEquippedType() const { return  EquipmentType; }
+	void SetEquippedActor(AInv_EquipActor* EquipActor);
 	
 private:
 
@@ -244,4 +246,7 @@ private:
 	
 	UPROPERTY(EditAnywhere, Category = "Inventory")
 	FName SocketAttachPoint{NAME_None};
+	
+	UPROPERTY(EditAnywhere, Category = "Inventory")
+	FGameplayTag EquipmentType = FGameplayTag::EmptyTag;
 };

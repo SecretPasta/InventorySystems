@@ -181,7 +181,7 @@ void FInv_EquipmentFragment::Manifest()
 
 AInv_EquipActor* FInv_EquipmentFragment::SpawnAttachedActor(USkeletalMeshComponent* AttachedMesh) const
 {
-	if (!IsValid(EquipActorClass) || IsValid(AttachedMesh)) return nullptr;
+	if (!IsValid(EquipActorClass) || !IsValid(AttachedMesh)) return nullptr;
 	
 	AInv_EquipActor* SpawnActor = AttachedMesh->GetWorld()->SpawnActor<AInv_EquipActor>(EquipActorClass);
 	SpawnActor->AttachToComponent(AttachedMesh, FAttachmentTransformRules::SnapToTargetNotIncludingScale, SocketAttachPoint);
@@ -194,4 +194,9 @@ void FInv_EquipmentFragment::DestroyAttachedActor() const
 	{
 		EquippedActor->Destroy();
 	}
+}
+
+void FInv_EquipmentFragment::SetEquippedActor(AInv_EquipActor* EquipActor)
+{
+	EquippedActor = EquipActor;
 }
