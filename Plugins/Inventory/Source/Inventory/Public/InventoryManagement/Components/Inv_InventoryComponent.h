@@ -56,6 +56,8 @@ public:
 	
 	UInv_InventoryBase* GetInventoryMenu() const { return InventoryMenu; }
 	
+	bool IsMenuOpen() const { return bInventoryMenuOpen; }
+	
 	FInventoryItemChanged OnItemAdded;
 	FInventoryItemChanged OnItemRemoved;
 	FNoRootInInventory NoRoomInInventory;
