@@ -140,7 +140,7 @@ void UInv_InventoryComponent::Multicast_EquipSlotClicked_Implementation(UInv_Inv
 {
 	// Equipment Component will listen to these delegates
 	OnItemEquipped.Broadcast(ItemToEquip);
-	OnItemUnEquipped.Broadcast(ItemToUnequip);
+	OnItemUnequipped.Broadcast(ItemToUnequip);
 }
 
 void UInv_InventoryComponent::ToggleInventoryMenu()

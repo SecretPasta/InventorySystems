@@ -61,7 +61,7 @@ public:
 	FNoRootInInventory NoRoomInInventory;
 	FStackChange OnStackChange;
 	FItemEquipStatusChanged OnItemEquipped;
-	FItemEquipStatusChanged OnItemUnEquipped;
+	FItemEquipStatusChanged OnItemUnequipped;
 	FInventoryMenuToggled OnInventoryMenuToggled;
 	
 protected:
