@@ -131,7 +131,7 @@ void FInv_StrengthModifier::OnUnequip(APlayerController* PC)
 	GEngine->AddOnScreenDebugMessage(
 		-1,
 		5.f,
-		FColor::Green,
+		FColor::Red,
 		FString::Printf(TEXT("Item unequipped. Strength decreased by: %f"),
 			GetValue()));
 }
@@ -165,5 +165,15 @@ void FInv_EquipmentFragment::Assimilate(UInv_CompositeBase* Composite) const
 	{
 		const FInv_EquipModifier& ModRef = Modifier.Get();
 		ModRef.Assimilate(Composite);
+	}
+}
+
+void FInv_EquipmentFragment::Manifest()
+{
+	FInv_InventoryItemFragment::Manifest();
+	for (TInstancedStruct<FInv_EquipModifier>& Modifier : EquipModifiers)
+	{
+		FInv_EquipModifier& ModRef = Modifier.GetMutable();
+		ModRef.Manifest();
 	}
 }
